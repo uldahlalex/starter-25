@@ -17,6 +17,8 @@ public partial class MyDbContext : DbContext
 
     public virtual DbSet<Genre> Genres { get; set; }
 
+    public virtual DbSet<Libraryuser> Libraryusers { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Author>(entity =>
@@ -74,6 +76,20 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Createdat).HasColumnName("createdat");
             entity.Property(e => e.Name).HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Libraryuser>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("libraryuser_pkey");
+
+            entity.ToTable("libraryuser", "library");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Createdat).HasColumnName("createdat");
+            entity.Property(e => e.Email).HasColumnName("email");
+            entity.Property(e => e.Passwordhash).HasColumnName("passwordhash");
+            entity.Property(e => e.Role).HasColumnName("role");
+            entity.Property(e => e.Salt).HasColumnName("salt");
         });
 
         OnModelCreatingPartial(modelBuilder);

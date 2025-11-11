@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using api.DTOs.Requests.SieveProcessors;
+using api.Etc;
 using api.Services;
 using dataccess;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,7 @@ public class Program
 {
     public static void ConfigureServices(IServiceCollection services)
     {
+        services.AddSingleton(TimeProvider.System);
         services.InjectAppOptions();
         services.AddMyDbContext();
         services.AddControllers().AddJsonOptions(opts =>
@@ -25,8 +28,9 @@ public class Program
         });
         services.AddCors();
         services.AddScoped<ILibraryService, LibraryService>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ISeeder, SieveTestSeeder>();
-        services.AddExceptionHandler<MyGlobalExceptionHandler>();
+        services.AddExceptionHandler<GlobalExceptionHandler>();
         services.Configure<SieveOptions>(options =>
         {
             options.CaseSensitive = false;

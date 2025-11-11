@@ -1,4 +1,4 @@
-namespace api;
+namespace api.Etc;
 
 public interface ISeeder
 {

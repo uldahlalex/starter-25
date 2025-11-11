@@ -1,7 +1,7 @@
 using Bogus;
 using dataccess;
 
-namespace api;
+namespace api.Etc;
 
 public class SieveTestSeeder(MyDbContext ctx) : ISeeder
 {
@@ -32,7 +32,7 @@ public class SieveTestSeeder(MyDbContext ctx) : ISeeder
                 "Literary Fiction", "Urban Fantasy", "Space Opera", "Cyberpunk", "Steampunk",
                 "Military Fiction", "Legal Thriller", "Medical Thriller", "Spy Fiction", "Satire"
             ))
-            .RuleFor(g => g.Createdat, f => f.Date.Past(5));
+            .RuleFor(g => g.Createdat, f => f.Date.Past(5).ToUniversalTime());
 
         var genres = genreFaker.Generate(50);
         ctx.Genres.AddRange(genres);
@@ -42,7 +42,7 @@ public class SieveTestSeeder(MyDbContext ctx) : ISeeder
         var authorFaker = new Faker<Author>()
             .RuleFor(a => a.Id, f => Guid.NewGuid().ToString())
             .RuleFor(a => a.Name, f => f.Name.FullName())
-            .RuleFor(a => a.Createdat, f => f.Date.Past(10));
+            .RuleFor(a => a.Createdat, f => f.Date.Past(10).ToUniversalTime());
 
         var authors = authorFaker.Generate(500);
         ctx.Authors.AddRange(authors);
@@ -54,7 +54,7 @@ public class SieveTestSeeder(MyDbContext ctx) : ISeeder
             .RuleFor(b => b.Id, f => Guid.NewGuid().ToString())
             .RuleFor(b => b.Title, f => GenerateRealisticBookTitle(f))
             .RuleFor(b => b.Pages, f => f.Random.Number(50, 1200))
-            .RuleFor(b => b.Createdat, f => f.Date.Past(20))
+            .RuleFor(b => b.Createdat, f => f.Date.Past(20).ToUniversalTime())
             .RuleFor(b => b.Genreid, f => f.PickRandom(genres).Id);
 
         var books = bookFaker.Generate(5000);

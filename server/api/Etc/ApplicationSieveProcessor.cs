@@ -1,11 +1,9 @@
-using System.Linq;
 using dataccess;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Sieve.Models;
 using Sieve.Services;
 
-namespace api.Services;
+namespace api.DTOs.Requests.SieveProcessors;
 
 /// <summary>
 /// Custom Sieve processor with fluent API configuration for entities

@@ -7,7 +7,7 @@ using NSwag.Generation;
 using NSwag.Generation.Processors;
 using Testcontainers.PostgreSql;
 
-namespace api;
+namespace api.Etc;
 
 public static class DiExtensions
 {
@@ -148,9 +148,15 @@ public static class DiExtensions
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         if (environment != "Production")
         {
-            var postgreSqlContainer = new PostgreSqlBuilder().Build();
+            var postgreSqlContainer = new PostgreSqlBuilder()
+                .WithDatabase("postgres")
+                .WithUsername("postgres")
+                .WithPassword("postgres")
+                .WithPortBinding("5432", false)
+                .WithExposedPort("5432").Build();
             postgreSqlContainer.StartAsync().GetAwaiter().GetResult();
             var connectionString = postgreSqlContainer.GetConnectionString();
+            Console.WriteLine("Connecting to DB: "+connectionString);
             services.AddDbContext<MyDbContext>((services, options) =>
             {
                 options.UseNpgsql(connectionString);
@@ -159,7 +165,10 @@ public static class DiExtensions
         else
         {
             services.AddDbContext<MyDbContext>(
-                (services, options) => { options.UseNpgsql(services.GetRequiredService<AppOptions>().Db); },
+                (services, options) =>
+                {
+                    options.UseNpgsql(services.GetRequiredService<AppOptions>().Db);
+                },
                 ServiceLifetime.Transient);
         }
     }

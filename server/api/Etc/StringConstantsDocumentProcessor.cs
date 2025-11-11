@@ -1,18 +1,9 @@
 using System.Reflection;
 using NJsonSchema;
-using NSwag.Generation;
 using NSwag.Generation.Processors;
 using NSwag.Generation.Processors.Contexts;
 
-
-public class TypeMapDocumentProcessor<T> : IDocumentProcessor
-{
-    public void Process(DocumentProcessorContext context)
-    {
-        var schema = context.SchemaGenerator.Generate(typeof(T));
-        context.Document.Definitions[typeof(T).Name] = schema;
-    }
-}
+namespace api.Etc;
 
 /// <summary>
 /// Document processor that extracts string constant values from a static class
